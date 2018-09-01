@@ -15,9 +15,12 @@
 	<div>
 		<ul>
 			{% for todo in todos %}
-			<li><input name "{{ todo.id }}" type="checkbox" value="{{ todo.complete }}">{{ todo.text }} 
-				<a href="{{ url_for('complete', id=todo.id) }}">Complete Item </a>
-				<a href="{{ url_for('delete', id=todo.id) }}">Delete Item </a>
+			<li>
+				<output name="{{ todo.id }}">{{ todo.text }}
+				<output name="{{ todo.id }}">{{ todo.complete }}
+				<a href="{{ url_for('MarkAsComplete', id=todo.id) }}">Toggle Complete</a> |
+				<a href="{{ url_for('MarkAsIncomplete', id=todo.id) }}">Toggle TODO</a> |
+				<a href="{{ url_for('delete', id=todo.id) }}">Delete Item</a>
 			</li>
 			{% endfor %}
 		</ul>

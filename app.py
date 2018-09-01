@@ -30,12 +30,29 @@ def delete(id):
 	db.session.commit()
 	return redirect(url_for('index'))
 
-@app.route('/complete/<id>', methods=['GET','POST'])
-def complete(id):
+@app.route('/MarkAsComplete/<id>', methods=['GET','POST'])
+def MarkAsComplete(id):
 	todo = Todo.query.filter_by(id=int(id)).first()
 	todo.complete = True
 	db.session.commit()
 	return redirect(url_for('index'))
+
+@app.route('/MarkAsIncomplete/<id>', methods=['GET','POST'])
+def MarkAsIncomplete(id):
+	todo = Todo.query.filter_by(id=int(id)).first()
+	todo.complete = False
+	db.session.commit()
+	return redirect(url_for('index'))
+
+@app.route('/status/<id>', methods=['GET','POST'])
+def status(id):
+	print('hi')
+	todo = Todo.query.filter_by(id=int(id)).first()
+	if todo.complete:
+		return 'Completed'
+	else:
+		return 'Not Completed'
+
 
 if __name__ == '__main__':
 	app.run(debug=True)
