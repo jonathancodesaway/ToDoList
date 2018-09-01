@@ -4,7 +4,6 @@ from flask_sqlalchemy import SQLAlchemy
 app = Flask(__name__)
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////home/jon/pracwebdev/project1/todo.db' 
- 
 
 db = SQLAlchemy(app) 
 
@@ -26,9 +25,13 @@ def add():
 	
 	return redirect(url_for('index'))
 
-@app.route('/update', methods=['POST'])
+@app.route('/complete/<id>', methods=['GET'])
+def complete(id):
 
-def update():
+	todo = Todo.query.filter_by(id=int(id)).delete()
+#	todo.complete = True
+	db.session.commit()
+
 	return redirect(url_for('index'))
 
 if __name__ == '__main__':
