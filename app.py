@@ -10,7 +10,7 @@ db = SQLAlchemy(app)
 class Todo(db.Model):
 	id = db.Column(db.Integer, primary_key=True)
 	text = db.Column(db.String(200))
-	complete = db.Column(db.Boolean)
+	complete = db.Column(db.String(200))
 
 @app.route('/')
 def index():
@@ -19,7 +19,7 @@ def index():
 
 @app.route('/add', methods=['POST'])
 def add():
-	todo = Todo(text=request.form['todoitem'], complete=False)
+	todo = Todo(text=request.form['todoitem'], complete='TODO')
 	db.session.add(todo)
 	db.session.commit()
 	return redirect(url_for('index'))
@@ -33,26 +33,16 @@ def delete(id):
 @app.route('/MarkAsComplete/<id>', methods=['GET','POST'])
 def MarkAsComplete(id):
 	todo = Todo.query.filter_by(id=int(id)).first()
-	todo.complete = True
+	todo.complete = 'DONE'
 	db.session.commit()
 	return redirect(url_for('index'))
 
 @app.route('/MarkAsIncomplete/<id>', methods=['GET','POST'])
 def MarkAsIncomplete(id):
 	todo = Todo.query.filter_by(id=int(id)).first()
-	todo.complete = False
+	todo.complete = 'TODO'
 	db.session.commit()
 	return redirect(url_for('index'))
-
-@app.route('/status/<id>', methods=['GET','POST'])
-def status(id):
-	print('hi')
-	todo = Todo.query.filter_by(id=int(id)).first()
-	if todo.complete:
-		return 'Completed'
-	else:
-		return 'Not Completed'
-
 
 if __name__ == '__main__':
 	app.run(debug=True)
