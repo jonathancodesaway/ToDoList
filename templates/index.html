@@ -15,7 +15,10 @@
 	<div>
 		<ul>
 			{% for todo in todos %}
-			<li>{{ todo.text }} <a href="{{ url_for('complete', id=todo.id) }}">Mark As Complete</a></li>
+			<li><input name "{{ todo.id }}" type="checkbox" value="{{ todo.complete }}">{{ todo.text }} 
+				<a href="{{ url_for('complete', id=todo.id) }}">Complete Item </a>
+				<a href="{{ url_for('delete', id=todo.id) }}">Delete Item </a>
+			</li>
 			{% endfor %}
 		</ul>
 	</div>

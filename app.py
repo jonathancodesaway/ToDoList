@@ -10,6 +10,7 @@ db = SQLAlchemy(app)
 class Todo(db.Model):
 	id = db.Column(db.Integer, primary_key=True)
 	text = db.Column(db.String(200))
+	complete = db.Column(db.Boolean)
 
 @app.route('/')
 def index():
@@ -18,14 +19,21 @@ def index():
 
 @app.route('/add', methods=['POST'])
 def add():
-	todo = Todo(text=request.form['todoitem'])
+	todo = Todo(text=request.form['todoitem'], complete=False)
 	db.session.add(todo)
 	db.session.commit()
 	return redirect(url_for('index'))
 
-@app.route('/complete/<id>', methods=['GET'])
-def complete(id):
+@app.route('/delete/<id>', methods=['GET'])
+def delete(id):
 	todo = Todo.query.filter_by(id=int(id)).delete()
+	db.session.commit()
+	return redirect(url_for('index'))
+
+@app.route('/complete/<id>', methods=['GET','POST'])
+def complete(id):
+	todo = Todo.query.filter_by(id=int(id)).first()
+	todo.complete = True
 	db.session.commit()
 	return redirect(url_for('index'))
 
