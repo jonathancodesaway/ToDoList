@@ -23,8 +23,16 @@ class Todo(db.Model):
 
 db.create_all()
 
-@app.route('/')
+@app.route('/', methods=['GET', 'POST'])
 def login():
+	global usern
+	usern = ""
+	return render_template('login.html')
+
+@app.route('/logout', methods=['GET','POST'])
+def logout():
+	global usern
+	usern = ""
 	return render_template('login.html')
 
 @app.route('/checkusername', methods=['GET', 'POST'])
