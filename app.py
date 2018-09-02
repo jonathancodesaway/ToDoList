@@ -3,23 +3,58 @@ from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////home/jon/pracwebdev/project1/todo.db' 
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////home/jon/pracwebdev/ToDoList/todo.db' 
 
 db = SQLAlchemy(app) 
 
+usern = ""
+
+class User(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(80), unique=True, nullable=False)
+    def __repr__(self):
+        return '<User %r>' % self.username
+
 class Todo(db.Model):
 	id = db.Column(db.Integer, primary_key=True)
+	use = db.Column(db.String(200))
 	text = db.Column(db.String(200))
 	complete = db.Column(db.String(200))
 
+db.create_all()
+
 @app.route('/')
+def login():
+	return render_template('login.html')
+
+@app.route('/checkusername', methods=['GET', 'POST'])
+def checkusername():
+	global usern
+	usern = request.form['username']
+	exists = db.session.query(User).filter(User.username == usern).all()
+	if exists:
+		return index()
+	else:
+		return render_template('login.html')
+
+@app.route('/makeusername', methods=['GET', 'POST'])
+def makeusername():
+	global usern
+	usern = request.form['newname']
+	newacc = User(username=usern)
+	db.session.add(newacc)
+	db.session.commit()
+	return index()
+
+
+@app.route('/index', methods=['GET', 'POST'])
 def index():
-	todos = Todo.query.all()
+	todos = db.session.query(Todo).filter(Todo.use == usern).all()
 	return render_template('index.html', todos=todos)
 
 @app.route('/add', methods=['POST'])
 def add():
-	todo = Todo(text=request.form['todoitem'], complete='TODO')
+	todo = Todo(use=usern, text=request.form['todoitem'], complete='TODO')
 	db.session.add(todo)
 	db.session.commit()
 	return redirect(url_for('index'))
