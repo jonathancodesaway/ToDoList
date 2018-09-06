@@ -14,12 +14,6 @@ else
     exit
 fi
 
-if python3 -c "import flask" &> /dev/null; then
-    echo 'Flask is had'
-else
-    echo 'uh oh'
-fi
-
 python3 -c "import flask"
 if [ $? -eq 1 ] ; then
 	echo 'Must pip3 install Flask'
@@ -30,6 +24,12 @@ python3 -c "import flask_sqlalchemy"
 if [ $? -eq 1 ] ; then
 	echo 'Must pip3 install flask_sqlalchemy'
 	exit
+fi
+
+python3 -c "import sys"
+if [ $? -eq 1 ] ; then
+    echo 'Must install sys module for Python3'
+    exit
 fi
 
 if [ ! -f /home/jon/pracwebdev/ToDoList/app.py ]; then
@@ -62,7 +62,5 @@ if [ ! -f /home/jon/pracwebdev/ToDoList/templates/login.html ]; then
 else
 	echo "login.html exists"
 fi
-
-
 
 python3 app.py $database
