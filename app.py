@@ -1,9 +1,16 @@
 from flask import Flask, render_template, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy 
+import sys
+
+pathway = sys.argv[1]
 
 app = Flask(__name__)
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////home/jon/pracwebdev/ToDoList/todo.db' 
+print('sqlite:///'+ pathway + '/todo.db')
+
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///'+ pathway + '/todo.db' 
+
+
 
 db = SQLAlchemy(app) 
 

@@ -44,6 +44,9 @@ if [ ! -f /home/jon/pracwebdev/ToDoList/todo.db ]; then
     exit
 else
 	echo "todo.db exists"
+	database=$(pwd todo.db)
+	echo 'testing'
+	echo $database
 fi
 
 if [ ! -f /home/jon/pracwebdev/ToDoList/templates/index.html ]; then
@@ -60,4 +63,6 @@ else
 	echo "login.html exists"
 fi
 
-python3 app.py
+
+
+python3 app.py $database
